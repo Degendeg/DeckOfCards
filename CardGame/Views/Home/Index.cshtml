@@ -1,0 +1,67 @@
+﻿@using System.Linq;
+@model List<CardGame.Models.DeckModel>
+
+@{
+    ViewBag.Title = "Home Page";
+}
+
+<br />
+<div class="well">
+    <div class="form-group">
+        <form id="myForm" method="post" action="@Url.Action("ConfirmChoice", "Home", null, null)">
+            <label for="sel1">Select one option:</label>
+            @{
+                List<SelectListItem> listItems = new List<SelectListItem>();
+                listItems.Add(new SelectListItem
+                {
+                    Text = "1. Shuffle the deck(s)",
+                    Value = "1"
+                });
+                listItems.Add(new SelectListItem
+                {
+                    Text = "2. Sort the deck(s)",
+                    Value = "2",
+                });
+                listItems.Add(new SelectListItem
+                {
+                    Text = "3. Pull a card from the deck(s)",
+                    Value = "3"
+                });
+                listItems.Add(new SelectListItem
+                {
+                    Text = "4. Add a new deck",
+                    Value = "4"
+                });
+            }
+            @Html.DropDownList("Choices", new SelectList(listItems, "Value", "Text"), new { @class = "form-control" })
+            <br />
+            <input type="submit" id="confirmBtn" class="btn btn-sm btn-info" value="Confirm" />
+        </form>
+    </div>
+</div>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title"><strong>Result:</strong></h3>
+    </div>
+    <div class="panel-body">
+        @if (Model.Select(x => x.ShowFirstCard).First() == true)
+        {
+            <div>You pulled: @TempData["Card"]</div>
+        }
+        <hr />
+        @if (Model.Any())
+        {
+            foreach (var m in Model)
+            {
+                foreach (var card in m.Cards)
+                {
+                    <span class="@card">@card</span>
+                }
+            }
+        }
+    </div>
+</div>
+
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/main.js"></script>
